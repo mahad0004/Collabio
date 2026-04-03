@@ -216,6 +216,67 @@ const CSS=`*{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0e1a2e;--bg2:#132040;--bg3:#1a2d50;--accent:#4fc3f7;--accent2:#29b6f6;--accent-glow:rgba(79,195,247,.15);--text:#e0ecf8;--text2:#8bb8de;--text3:#4a7aaa;--border:#1e3a5f;--r:8px;--sb-w:56px;--sb-exp:210px}
 html,body,#root{height:100%;overflow:hidden}
 body{font-family:'League Spartan',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+const CSS = `
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0e1a2e;--bg2:#132040;--bg3:#1a2d50;--accent:#4fc3f7;--accent2:#29b6f6;--accent-glow:rgba(79,195,247,.15);--text:#e0ecf8;--text2:#8bb8de;--text3:#4a7aaa;--border:#1e3a5f;--r:8px;--sb-w:56px;--sb-exp:210px}
+html,body,#root{height:100%;overflow:hidden}
+body{font-family:'League Spartan',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* --- NEW STYLES FOR FOOTER AND POLICIES --- */
+.ftr {
+  padding: 40px 16px 30px;
+  text-align: center;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+}
+.ftr-btn {
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color .15s;
+}
+.ftr-btn:hover {
+  color: var(--accent);
+}
+.policy-page {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 30px;
+  background: var(--bg2);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  line-height: 1.6;
+  animation: fu .2s ease;
+}
+.policy-page h2 {
+  color: var(--text);
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 800;
+}
+.policy-page h3 {
+  color: var(--text);
+  margin-top: 24px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.policy-page p {
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+`;
+
 
 /* BRIGHT LIGHT BLUE BACKGROUND */
 body::before{content:'';position:fixed;inset:0;z-index:-2;
@@ -516,3 +577,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(
 </script>
 </body>
 </html>
+
