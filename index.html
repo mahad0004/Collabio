@@ -4,21 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0a1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
 <title>KhelABC - Free Online Games</title>
 <link rel="icon" href="https://i.ibb.co/qYKrLz5L/image-removebg-preview-4.png">
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3440868789646344"
-     crossorigin="anonymous"></script>
-  <!-- Google tag (gtag.js) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3440868789646344" crossorigin="anonymous"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-1QF3PSRYBM"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-1QF3PSRYBM');
 </script>
 </head>
@@ -27,29 +27,31 @@
 <script type="text/babel">
 const {useState,useEffect,useRef,useCallback,useMemo}=React;
 
-// Sound
 const AudioCtx=window.AudioContext||window.webkitAudioContext;let actx=null;
 function getCtx(){if(!actx)actx=new AudioCtx();return actx}
 function playClick(){try{const c=getCtx(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.setValueAtTime(800,c.currentTime);o.frequency.exponentialRampToValueAtTime(1200,c.currentTime+0.05);g.gain.setValueAtTime(0.15,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.1);o.start(c.currentTime);o.stop(c.currentTime+0.1)}catch(e){}}
 function playGameOpen(){try{const c=getCtx();[440,554,659,880].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type="sine";o.frequency.setValueAtTime(f,c.currentTime+i*0.06);g.gain.setValueAtTime(0.1,c.currentTime+i*0.06);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+i*0.06+0.2);o.start(c.currentTime+i*0.06);o.stop(c.currentTime+i*0.06+0.2)})}catch(e){}}
 function playLike(){try{const c=getCtx();[523,659,784].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.setValueAtTime(f,c.currentTime+i*0.08);g.gain.setValueAtTime(0.12,c.currentTime+i*0.08);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+i*0.08+0.15);o.start(c.currentTime+i*0.08);o.stop(c.currentTime+i*0.08+0.15)})}catch(e){}}
 
-// ALL GAMES - tags now support multi-category
+// === SLUG HELPER ===
+function toSlug(str){return str.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')}
+
+// === ALL GAMES ===
 const DB=[
-{id:1,t:"99 Nights in the Forest",e:"https://cloud.onlinegames.io/games/2026/unity/99-nights-in-the-forest-survival/game.html",i:"https://www.onlinegames.io/media/posts/1190/responsive/99-nights-in-the-forest-xs.webp",d:"Survive 99 nights in a deserted forest. Craft tools, guard yourself from werewolves!",tags:"survival,horror,adventure,crafting",f:1},
+{id:1,t:"99 Nights in the Forest",e:"https://cloud.onlinegames.io/games/2026/unity/99-nights-in-the-forest-survival/game.html",i:"https://www.onlinegames.io/media/posts/1190/responsive/99-nights-in-the-forest-xs.webp",d:"Survive 99 nights in a deserted forest. Craft tools, guard yourself from werewolves!",tags:"survival,horror,adventure,crafting,roblox",f:1},
 {id:2,t:"CS Online",e:"https://www.onlinegames.io/games/2023/unity2/cs-online/index.html",i:"https://www.onlinegames.io/media/posts/434/responsive/CS-Online-xs.jpg",d:"Counter-Strike inspired multiplayer FPS with multiple weapon options.",tags:"shooting,action,multiplayer,fps",f:1},
 {id:3,t:"Steal Brainrot Heist",e:"https://cloud.onlinegames.io/games/2026/unity/steal-brainrot-heist/game.html",i:"https://www.onlinegames.io/media/posts/1180/responsive/steal-brainrot-heist-2-xs.webp",d:"Hunt funny brainrot characters and bring them to your base!",tags:"action,fun,multiplayer",f:1},
 {id:4,t:"Five Nights at Poppy",e:"https://cloud.onlinegames.io/games/2025/unity2/five-nights-at-poppy/index-og.html",i:"https://www.onlinegames.io/media/posts/992/responsive/Five-Nights-at-Poppy-xs.jpg",d:"FNAF-inspired horror! Survive nights at an abandoned hospital.",tags:"horror,survival,action",f:1},
 {id:5,t:"GTA Simulator",e:"https://www.onlinegames.io/games/2023/unity2/gta-simulator/index.html",i:"https://www.onlinegames.io/media/posts/416/responsive/GTA-Simulator-xs.jpg",d:"Free roam GTA-style open world in your browser!",tags:"action,driving,shooting,simulator",f:1},
 {id:6,t:"Fall Brainrots",e:"https://cloud.onlinegames.io/games/2026/unity/fall-brainrots/game.html",i:"https://www.onlinegames.io/media/posts/1194/responsive/fall-brainrots-xs.webp",d:"Multiplayer parkour with brainrot characters. Don't fall!",tags:"multiplayer,arcade,racing",f:1},
 {id:7,t:"Geometry Dash",e:"https://www.onlinegames.io/games/2023/q2/geometry-dash-freezenova/index.html",i:"https://www.onlinegames.io/media/posts/510/responsive/Geometry-Dash-FreezeNova-xs.jpg",d:"Jump to the beat! Navigate through obstacles synced to music.",tags:"arcade,skill,action",f:1},
-{id:8,t:"8 Ball Pool",e:"https://www.onlinegames.io/games/2022/unity3/8-ball-pool-billiard/index.html",i:"https://www.onlinegames.io/media/posts/442/responsive/8-Ball-Pool-Billiard-xs.jpg",d:"Play pool online against AI or real players!",tags:"sports,multiplayer",f:1},
+{id:8,t:"8 Ball Pool",e:"https://www.onlinegames.io/games/2022/unity3/8-ball-pool-billiard/index.html",i:"https://www.onlinegames.io/media/posts/442/responsive/8-Ball-Pool-Billiard-xs.jpg",d:"Play pool online against AI or real players!",tags:"sports,multiplayer"},
 {id:9,t:"Drift King",e:"https://www.onlinegames.io/games/2024/unity/drift-king/index.html",i:"https://www.onlinegames.io/media/posts/729/responsive/Drift-King-xs.jpg",d:"Premium 3D drift game with 10 sports cars and 6 maps.",tags:"racing,drift,car"},
 {id:10,t:"Stickman GTA City",e:"https://cloud.onlinegames.io/games/2024/unity3/stickman-gta-city/index-og.html",i:"https://www.onlinegames.io/media/posts/900/responsive/stickman-gta-city-free-xs.jpg",d:"GTA meets stickman! Drive, shoot, explore a massive city.",tags:"action,driving,shooting,stickman"},
 {id:11,t:"Masked Special Forces",e:"https://www.onlinegames.io/games/2022/unity2/masked-special-forces/index.html",i:"https://www.onlinegames.io/media/posts/310/responsive/Masked-Special-Forces-FPS-xs.jpg",d:"Multiplayer FPS with tons of customization.",tags:"shooting,action,multiplayer,fps"},
 {id:12,t:"Stickman Parkour",e:"https://cloud.onlinegames.io/games/2024/construct/219/stickman-parkour/index-og.html",i:"https://www.onlinegames.io/media/posts/871/responsive/stickman-parkour-OG-xs.jpg",d:"30 levels of parkour action!",tags:"arcade,parkour,stickman,action"},
 {id:13,t:"Highway Traffic",e:"https://www.onlinegames.io/games/2022/unity/highway-traffic/index.html",i:"https://www.onlinegames.io/media/posts/32/responsive/Highway-Traffic-2-xs.jpg",d:"Dodge traffic on a busy highway!",tags:"racing,car,driving"},
-{id:14,t:"Dublix",e:"https://cloud.onlinegames.io/games/2025/unity4/dublix/game-og.html",i:"https://www.onlinegames.io/media/posts/1126/responsive/dublix-xs.webp",d:"Roblox-inspired multiplayer world.",tags:"multiplayer,adventure,racing"},
+{id:14,t:"Dublix",e:"https://cloud.onlinegames.io/games/2025/unity4/dublix/game-og.html",i:"https://www.onlinegames.io/media/posts/1126/responsive/dublix-xs.webp",d:"Roblox-inspired multiplayer world.",tags:"multiplayer,adventure,racing,roblox",f:1},
 {id:15,t:"Madalin Stunt Cars",e:"https://www.onlinegames.io/games/2023/unity/madalin-stunt-cars-pro/index.html",i:"https://www.onlinegames.io/media/posts/401/responsive/Madalin-Stunt-Cars-Pro-Game-xs.jpg",d:"Drive luxury sports cars on 3 stunt maps!",tags:"racing,car,stunt,multiplayer"},
 {id:16,t:"Drift Hunters Pro",e:"https://www.onlinegames.io/games/2023/unity/drift-hunters-pro/index.html",i:"https://www.onlinegames.io/media/posts/397/responsive/Drift-Hunters-Pro-xs.jpg",d:"Thrilling 3D drifting with 6 tracks!",tags:"racing,drift,car"},
 {id:17,t:"Escape Car",e:"https://cloud.onlinegames.io/games/2025/unity2/escape-car/index-og.html",i:"https://www.onlinegames.io/media/posts/1000/responsive/Escape-Car-xs.jpg",d:"Top-down GTA-style driving with police chases!",tags:"racing,car,driving,action"},
@@ -61,9 +63,9 @@ const DB=[
 {id:23,t:"Mob City",e:"https://www.onlinegames.io/games/2021/unity3/mob-city/index.html",i:"https://www.onlinegames.io/media/posts/418/responsive/Mob-City-xs.jpg",d:"3D shooting game with mafia missions.",tags:"shooting,action"},
 {id:24,t:"ArmedForces.io",e:"https://www.onlinegames.io/games/2021/unity3/armedforces-io/index.html",i:"https://www.onlinegames.io/media/posts/234/responsive/Armed-Forces-io-xs.jpg",d:"3D multiplayer FPS with 8 weapons!",tags:"shooting,multiplayer,fps,io,action"},
 {id:25,t:"Cube Worlds",e:"https://cloud.onlinegames.io/games/2025/html/cube-worlds/index-og.html",i:"https://www.onlinegames.io/media/posts/986/responsive/Cube-Worlds-xs.jpg",d:"Minecraft-like block building!",tags:"sandbox,minecraft,building"},
-{id:26,t:"Cat Simulator",e:"https://www.onlinegames.io/games/2022/unity4/cat-simulator/index.html",i:"https://www.onlinegames.io/media/posts/330/responsive/Cat-Simulator-Online-xs.jpg",d:"Be a cat! Explore the world purring.",tags:"simulator,casual,animal"},
+{id:26,t:"Cat Simulator",e:"https://www.onlinegames.io/games/2022/unity4/cat-simulator/index.html",i:"https://www.onlinegames.io/media/posts/330/responsive/Cat-Simulator-Online-xs.jpg",d:"Be a cat! Explore the world purring.",tags:"simulator,casual,animal",f:1},
 {id:27,t:"Fast Food Rush",e:"https://cloud.onlinegames.io/games/2025/unity/fast-food-rush/index-og.html",i:"https://www.onlinegames.io/media/posts/979/responsive/fast-food-rush-xs.jpg",d:"Run your own burger joint!",tags:"simulator,casual,cooking"},
-{id:28,t:"CubeCraft Survival",e:"https://cloud.onlinegames.io/games/2025/unity4/cubecraft-survival/index-og.html",i:"https://www.onlinegames.io/media/posts/1113/responsive/cubecraft-survival-xs.webp",d:"Minecraft-inspired survival!",tags:"survival,minecraft,crafting,sandbox"},
+{id:28,t:"CubeCraft Survival",e:"https://cloud.onlinegames.io/games/2025/unity4/cubecraft-survival/index-og.html",i:"https://www.onlinegames.io/media/posts/1113/responsive/cubecraft-survival-xs.webp",d:"Minecraft-inspired survival!",tags:"survival,minecraft,crafting,sandbox",f:1},
 {id:29,t:"Block Blast",e:"https://cloud.onlinegames.io/games/2024/unity3/block-blast/index-og.html",i:"https://www.onlinegames.io/media/posts/876/responsive/block-blast-xs.jpg",d:"Tetris without time pressure!",tags:"puzzle,casual,arcade"},
 {id:30,t:"Crazy Cattle 3D",e:"https://cloud.onlinegames.io/games/2025/unity3/crazy-cattle-3d/index-og.html",i:"https://www.onlinegames.io/media/posts/1004/responsive/Crazy-Cattle-3D-xs.jpg",d:"Battle royale with bouncy sheep!",tags:"action,fun,multiplayer"},
 {id:31,t:"Army Combat",e:"https://www.onlinegames.io/games/2021/unity/army-combat/index.html",i:"https://www.onlinegames.io/media/posts/664/responsive/Army-Combat-xs.jpg",d:"3D army action shooter!",tags:"shooting,action,fps"},
@@ -74,7 +76,7 @@ const DB=[
 {id:36,t:"Crazy Karts",e:"https://www.onlinegames.io/games/2024/unity/crazy-karts/index.html",i:"https://www.onlinegames.io/media/posts/740/responsive/Crazy-Karts-xs.jpg",d:"Multiplayer kart racing!",tags:"racing,multiplayer,kart"},
 {id:37,t:"Bus Subway Runner",e:"https://www.onlinegames.io/games/2022/unity/bus-subway-runner/index.html",i:"https://www.onlinegames.io/media/posts/235/responsive/Bus-Subway-Runner-Game-xs.jpg",d:"Subway Surfer style runner!",tags:"arcade,running,action"},
 {id:38,t:"2048",e:"https://cloud.onlinegames.io/games/2025/html/2048/index.html",i:"https://www.onlinegames.io/media/posts/916/responsive/2048-xs.jpg",d:"Slide tiles, merge numbers, reach 2048!",tags:"puzzle,brain,casual"},
-{id:39,t:"Head Soccer",e:"https://www.onlinegames.io/games/2023/construct/280/head-soccer-2022/index.html",i:"https://www.onlinegames.io/media/posts/624/responsive/Head-Soccer-2022-xs.jpg",d:"2-player big-head football!",tags:"sports,2player,soccer"},
+{id:39,t:"Head Soccer",e:"https://www.onlinegames.io/games/2023/construct/280/head-soccer-2022/index.html",i:"https://www.onlinegames.io/media/posts/624/responsive/Head-Soccer-2022-xs.jpg",d:"2-player big-head football!",tags:"sports,2player,soccer,football"},
 {id:40,t:"Among Impostor",e:"https://www.onlinegames.io/games/2023/construct/234/among-impostor/index.html",i:"https://www.onlinegames.io/media/posts/472/responsive/Among-Impostor-xs.jpg",d:"Among Us inspired!",tags:"multiplayer,fun,casual"},
 {id:41,t:"Dinosaur Game",e:"https://www.onlinegames.io/games/2023/q2/dinosaur-game/index.html",i:"https://www.onlinegames.io/media/posts/417/responsive/Dinosaur-Game-Online-xs.jpg",d:"Chrome's T-Rex game online!",tags:"arcade,casual"},
 {id:42,t:"Snake",e:"https://cloud.onlinegames.io/games/2024/phaser/snake/index-og.html",i:"https://www.onlinegames.io/media/posts/919/responsive/snake-xs.jpg",d:"Classic snake game!",tags:"arcade,casual"},
@@ -107,7 +109,7 @@ const DB=[
 {id:69,t:"Basketball io",e:"https://www.onlinegames.io/games/2022/unity3/basketball-io/index.html",i:"https://www.onlinegames.io/media/posts/302/responsive/Basketball-io-2-xs.jpg",d:"Online basketball with slam dunks!",tags:"sports,io,multiplayer"},
 {id:70,t:"Legendary Sniper",e:"https://www.onlinegames.io/games/2021/unity3/legendary-sniper/index.html",i:"https://www.onlinegames.io/media/posts/596/responsive/Legendary-Sniper-xs.jpg",d:"Online sniper shooter game!",tags:"shooting,sniper,action"},
 {id:71,t:"Love Tester Story",e:"https://cloud.onlinegames.io/games/2024/construct/225/love-tester-story/index-og.html",i:"https://www.onlinegames.io/media/posts/816/responsive/Love-Tester-Story-xs.jpg",d:"Find the One for You!",tags:"fun,casual,girl"},
-{id:72,t:"Car Football",e:"https://www.onlinegames.io/games/2023/construct/198/car-football/index.html",i:"https://www.onlinegames.io/media/posts/405/responsive/Car-Football-xs.jpg",d:"Football with monster trucks!",tags:"sports,2player,car,racing"},
+{id:72,t:"Car Football",e:"https://www.onlinegames.io/games/2023/construct/198/car-football/index.html",i:"https://www.onlinegames.io/media/posts/405/responsive/Car-Football-xs.jpg",d:"Football with monster trucks!",tags:"sports,2player,car,racing,football,soccer"},
 {id:73,t:"F1 Drift Racer",e:"https://www.onlinegames.io/games/2022/construct/134/f1-drift-racer/index.html",i:"https://www.onlinegames.io/media/posts/504/responsive/F1-Drift-Racer-xs.jpg",d:"Formula 1 drift racing!",tags:"racing,drift"},
 {id:74,t:"Pixelmon Town",e:"https://cloud.onlinegames.io/games/2025/html/pixelmon-town/game.html",i:"https://www.onlinegames.io/media/posts/1214/responsive/pixelmon-town-xs.webp",d:"Minecraft-inspired sandbox!",tags:"sandbox,minecraft"},
 {id:75,t:"Highway Racer Pro",e:"https://www.onlinegames.io/games/2024/unity/highway-racer-pro/index.html",i:"https://www.onlinegames.io/media/posts/822/responsive/Highway-Racer-Pro-xs.jpg",d:"Advanced highway racing!",tags:"racing,car,driving"},
@@ -140,7 +142,7 @@ const DB=[
 {id:102,t:"Drift Fury",e:"https://www.onlinegames.io/games/2023/unity/drift-fury/index.html",i:"https://www.onlinegames.io/media/posts/650/responsive/Drift-Fury-xs.jpg",d:"Drift on mountain roads!",tags:"racing,drift,car"},
 {id:103,t:"Bandits Multiplayer",e:"https://www.onlinegames.io/games/2021/unity2/bandits-multiplayer-pvp/index.html",i:"https://www.onlinegames.io/media/posts/487/responsive/Bandits-Multiplayer-PvP-xs.jpg",d:"Wild West multiplayer battles!",tags:"shooting,multiplayer,action"},
 {id:104,t:"CobraZ.io Classic",e:"https://www.onlinegames.io/games/2022/unity/cobraz-io-classic/index.html",i:"https://www.onlinegames.io/media/posts/546/responsive/Cobraz.io-Classic-xs.jpg",d:"Advanced multiplayer FPS!",tags:"shooting,io,fps,action"},
-{id:105,t:"Football King",e:"https://www.onlinegames.io/games/2024/construct/226/football-king/index.html",i:"https://www.onlinegames.io/media/posts/739/responsive/Football-King-xs.jpg",d:"2-player football action!",tags:"sports,2player,soccer"},
+{id:105,t:"Football King",e:"https://www.onlinegames.io/games/2024/construct/226/football-king/index.html",i:"https://www.onlinegames.io/media/posts/739/responsive/Football-King-xs.jpg",d:"2-player football action!",tags:"sports,2player,soccer,football"},
 {id:106,t:"Mahjong",e:"https://cloud.onlinegames.io/games/2025/unity/mahjong/index-og.html",i:"https://www.onlinegames.io/media/posts/966/responsive/Mahjong-xs.jpg",d:"Classic Mahjong puzzle!",tags:"puzzle,brain,casual"},
 {id:107,t:"Mech Shooter",e:"https://www.onlinegames.io/games/2022/unity/mech-shooter/index.html",i:"https://www.onlinegames.io/media/posts/649/responsive/Mech-Shooter-xs.jpg",d:"3D robot shooting game!",tags:"shooting,action"},
 {id:108,t:"Legends Arena",e:"https://www.onlinegames.io/games/2023/unity2/legends-arena/index.html",i:"https://www.onlinegames.io/media/posts/608/responsive/Legends-Arena-xs.jpg",d:"Team-based multiplayer shooting!",tags:"shooting,multiplayer,action"},
@@ -158,9 +160,14 @@ const DB=[
 {id:120,t:"Crazy Car Arena",e:"https://www.onlinegames.io/games/2022/unity3/crazy-car-arena/index.html",i:"https://www.onlinegames.io/media/posts/317/responsive/Crazy-Car-Arena-Game-xs.jpg",d:"Stunts on crazy tracks!",tags:"racing,stunt,car"},
 ];
 
+// Add slug to each game
+DB.forEach(g=>{g.slug=toSlug(g.t)});
+
 const LOGO="https://i.ibb.co/qYKrLz5L/image-removebg-preview-4.png";
 
-// Categories with SVG paths
+// === FEATURED / BIG THUMBNAIL GAMES ===
+const FEATURED_BIG=new Set([1,7,4,28,6,2,26,14]); // 99 Nights, Geometry Dash, Five Nights, CubeCraft, Fall Brainrots, CS Online, Cat Simulator, Dublix
+
 const CATS=[
 {n:"All",icon:"M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"},
 {n:"Action",icon:"M13 10V3L4 14h7v7l9-11h-7z"},
@@ -180,87 +187,194 @@ const CATS=[
 {n:"IO Games",icon:"M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064"},
 {n:"Clicker",icon:"M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"},
 ];
+CATS.forEach(c=>{c.slug=toSlug(c.n)});
 
-// Multi-category matching
-function matchesCat(g, catName){
+function matchesCat(g,catName){
   if(catName==="All")return true;
   const t=g.tags||"";
-  const map={"Action":"action","Shooting":"shooting,fps,sniper","Racing":"racing,drift,car,driving,bike,stunt","Arcade":"arcade,parkour,running,skill","Sports":"sports,soccer,basketball,pool","Puzzle":"puzzle,brain,card","Multiplayer":"multiplayer,io","Survival":"survival,crafting","Sandbox":"sandbox,minecraft,building","Strategy":"strategy,tower-defense","Simulator":"simulator,cooking,flying","Casual":"casual,fun,girl,idle","2 Player":"2player","Horror":"horror","IO Games":"io","Clicker":"clicker,idle"};
+  const map={"Action":"action","Shooting":"shooting,fps,sniper","Racing":"racing,drift,car,driving,bike,stunt","Arcade":"arcade,parkour,running,skill","Sports":"sports,soccer,basketball,pool,football","Puzzle":"puzzle,brain,card","Multiplayer":"multiplayer,io","Survival":"survival,crafting","Sandbox":"sandbox,minecraft,building","Strategy":"strategy,tower-defense","Simulator":"simulator,cooking,flying","Casual":"casual,fun,girl,idle","2 Player":"2player","Horror":"horror","IO Games":"io","Clicker":"clicker,idle"};
   const keys=(map[catName]||"").split(",");
   return keys.some(k=>t.includes(k));
 }
 
-// Seeded shuffle for consistent layout per session
-function seededShuffle(arr,seed){
-  const a=[...arr];let s=seed;
-  for(let i=a.length-1;i>0;i--){s=(s*16807+0)%2147483647;const j=s%i;[a[i],a[j]]=[a[j],a[i]]}
-  return a;
+// === SMART SEARCH ===
+// Synonym map for fuzzy/smart search
+const SYNONYMS={
+  "soccer":"football,soccer,sports","football":"football,soccer,sports",
+  "horror":"horror,survival,zombie,scary","scary":"horror",
+  "shooter":"shooting,fps,sniper","fps":"shooting,fps",
+  "minecraft":"minecraft,sandbox,building,crafting,survival","craft":"crafting,minecraft,survival",
+  "car":"car,racing,drift,driving,stunt","drive":"driving,car,racing",
+  "roblox":"roblox,multiplayer,adventure","multiplayer":"multiplayer,io,2player",
+  "2 player":"2player","two player":"2player","2player":"2player",
+  "zombie":"zombie,horror","bike":"bike,racing",
+  "fight":"action,shooting,fps","battle":"action,strategy,shooting",
+  "run":"running,arcade,parkour","jump":"arcade,parkour,skill",
+  "cook":"cooking,simulator","farm":"simulator,casual",
+  "click":"clicker,idle","idle":"idle,clicker,casual",
+  "puzzle":"puzzle,brain,card","brain":"brain,puzzle",
+  "sport":"sports,soccer,football","ball":"sports,soccer,football,basketball",
+  "animal":"animal,simulator,casual","cat":"animal,simulator,casual",
+  "tank":"tank,shooting,action","sniper":"sniper,shooting",
+  "stickman":"stickman,action,arcade","ninja":"action,adventure",
+  "tower":"tower-defense,strategy","defense":"tower-defense,strategy",
+  "pool":"sports,multiplayer","chess":"puzzle,brain,strategy",
+  "card":"card,casual,puzzle",
+};
+
+function smartSearch(query){
+  const q=query.toLowerCase().trim();
+  if(!q)return[];
+  const words=q.split(/\s+/);
+
+  // Score each game
+  const scored=DB.map(g=>{
+    let score=0;
+    const titleLow=g.t.toLowerCase();
+    const tagsLow=(g.tags||"").toLowerCase();
+    const descLow=(g.d||"").toLowerCase();
+
+    // Exact title match = highest
+    if(titleLow===q)score+=1000;
+    // Title starts with query
+    else if(titleLow.startsWith(q))score+=500;
+    // Title contains full query
+    else if(titleLow.includes(q))score+=300;
+
+    // Each word match in title
+    words.forEach(w=>{
+      if(w.length<2)return;
+      if(titleLow.includes(w))score+=100;
+      // Fuzzy: allow 1 char typo for words > 3 chars
+      if(w.length>3){
+        const titleWords=titleLow.split(/\s+/);
+        titleWords.forEach(tw=>{
+          if(tw.length>3&&levenshtein(w,tw)<=1)score+=60;
+        });
+      }
+    });
+
+    // Tag matching
+    words.forEach(w=>{
+      if(tagsLow.includes(w))score+=50;
+      // Synonym expansion
+      const synKey=Object.keys(SYNONYMS).find(k=>k===w||levenshtein(k,w)<=1);
+      if(synKey){
+        const expanded=SYNONYMS[synKey].split(",");
+        expanded.forEach(syn=>{
+          if(tagsLow.includes(syn))score+=40;
+        });
+      }
+    });
+
+    // Description match
+    words.forEach(w=>{
+      if(w.length>2&&descLow.includes(w))score+=20;
+    });
+
+    return{...g,score};
+  });
+
+  return scored.filter(g=>g.score>0).sort((a,b)=>b.score-a.score);
 }
 
-// Distribute featured cards evenly through grid
+function levenshtein(a,b){
+  if(a.length===0)return b.length;
+  if(b.length===0)return a.length;
+  const m=[];
+  for(let i=0;i<=b.length;i++)m[i]=[i];
+  for(let j=0;j<=a.length;j++)m[0][j]=j;
+  for(let i=1;i<=b.length;i++){
+    for(let j=1;j<=a.length;j++){
+      if(b.charAt(i-1)===a.charAt(j-1))m[i][j]=m[i-1][j-1];
+      else m[i][j]=Math.min(m[i-1][j-1]+1,m[i][j-1]+1,m[i-1][j]+1);
+    }
+  }
+  return m[b.length][a.length];
+}
+
+// === URL ROUTING ===
+function getRoute(){
+  const h=window.location.hash.slice(1)||"";
+  if(!h||h==="/")return{page:"home",cat:"All",query:"",gameSlug:""};
+  const parts=h.split("/").filter(Boolean);
+  if(parts[0]==="play"&&parts[1]){
+    return{page:"game",cat:"All",query:"",gameSlug:parts[1]};
+  }
+  if(parts[0]==="search"&&parts[1]){
+    return{page:"search",cat:"All",query:decodeURIComponent(parts[1]),gameSlug:""};
+  }
+  if(parts[0]==="category"&&parts[1]){
+    const catSlug=parts[1];
+    const found=CATS.find(c=>c.slug===catSlug);
+    return{page:"home",cat:found?found.n:"All",query:"",gameSlug:""};
+  }
+  return{page:"home",cat:"All",query:"",gameSlug:""};
+}
+
+function setRoute(page,extra){
+  if(page==="home"&&(!extra||extra==="All")){
+    window.location.hash="/";
+  }else if(page==="home"&&extra){
+    window.location.hash="/category/"+toSlug(extra);
+  }else if(page==="game"&&extra){
+    window.location.hash="/play/"+extra;
+  }else if(page==="search"&&extra){
+    window.location.hash="/search/"+encodeURIComponent(extra);
+  }
+}
+
+// === GRID WITH EXPLICIT FEATURED ===
 function buildSizedList(games){
-  const shuffled=seededShuffle(games,42);
-  const total=shuffled.length;
-  // Determine how many big/medium cards based on total games
-  const numBig=Math.min(3,Math.max(1,Math.floor(total/10)));
-  const numMed=Math.min(8,Math.max(2,Math.floor(total/5)));
-  // Pick indices to promote - spread evenly
-  const bigIndices=new Set();
-  const medIndices=new Set();
-  for(let i=0;i<numBig;i++){
-    const idx=Math.floor((i+1)*total/(numBig+1));
-    bigIndices.add(idx);
-  }
-  for(let i=0;i<numMed;i++){
-    const idx=Math.floor((i+1)*total/(numMed+1));
-    if(!bigIndices.has(idx))medIndices.add(idx);
-  }
-  return shuffled.map((g,i)=>{
+  // Featured games get big thumbnails, rest normal
+  return games.map(g=>{
     let sz="";
-    if(bigIndices.has(i))sz="col3";
-    else if(medIndices.has(i))sz="col2";
+    if(FEATURED_BIG.has(g.id))sz="featured";
     return{...g,sz};
   });
 }
 
+// === CSS ===
 const CSS=`*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0e1a2e;--bg2:#132040;--bg3:#1a2d50;--accent:#4fc3f7;--accent2:#29b6f6;--accent-glow:rgba(79,195,247,.15);--text:#e0ecf8;--text2:#8bb8de;--text3:#4a7aaa;--border:#1e3a5f;--r:8px;--sb-w:56px;--sb-exp:210px}
+:root{--bg:#0e1a2e;--bg2:#132040;--bg3:#1a2d50;--accent:#4fc3f7;--accent2:#29b6f6;--accent-glow:rgba(79,195,247,.15);--text:#e0ecf8;--text2:#8bb8de;--text3:#4a7aaa;--border:#1e3a5f;--r:10px;--sb-w:56px;--sb-exp:210px;--safe-b:env(safe-area-inset-bottom,0px)}
 html,body,#root{height:100%;overflow:hidden}
-body{font-family:'League Spartan',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+body{font-family:'League Spartan',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 
-/* BRIGHT LIGHT BLUE BACKGROUND */
 body::before{content:'';position:fixed;inset:0;z-index:-2;
 background:linear-gradient(170deg,#1a237e 0%,#1565c0 20%,#42a5f5 45%,#64b5f6 60%,#90caf9 75%,#bbdefb 90%,#e3f2fd 100%)}
 body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.1;
 background-image:url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cfilter id='b'%3E%3CfeGaussianBlur stdDeviation='2'/%3E%3C/filter%3E%3C/defs%3E%3Crect x='30' y='15' width='40' height='40' rx='4' transform='rotate(45 50 35)' fill='%2390caf9' opacity='.5' filter='url(%23b)'/%3E%3Crect x='70' y='65' width='25' height='25' rx='3' transform='rotate(45 82 77)' fill='%2364b5f6' opacity='.4' filter='url(%23b)'/%3E%3Crect x='5' y='75' width='20' height='20' rx='2' transform='rotate(45 15 85)' fill='%23bbdefb' opacity='.35' filter='url(%23b)'/%3E%3C/svg%3E");
 background-size:120px 120px;background-attachment:fixed}
 
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:rgba(79,195,247,.3);border-radius:4px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:rgba(79,195,247,.3);border-radius:4px}::-webkit-scrollbar-track{background:transparent}
 .app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 
 /* HEADER */
-.hdr{height:52px;background:rgba(14,26,46,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;z-index:100;flex-shrink:0}
+.hdr{height:52px;background:rgba(14,26,46,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:10px;z-index:100;flex-shrink:0}
 .logo{display:flex;align-items:center;cursor:pointer;flex-shrink:0}
-.logo img{height:38px}
-.srch{flex:1;max-width:400px;position:relative}
-.srch input{width:100%;height:36px;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:20px;padding:0 14px 0 34px;color:var(--text);font-family:inherit;font-size:13px;outline:0;transition:border .15s}
+.logo img{height:36px}
+
+/* SEARCH - centered and wider */
+.srch{flex:1;max-width:560px;position:relative;margin:0 auto}
+.srch input{width:100%;height:38px;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:22px;padding:0 16px 0 38px;color:var(--text);font-family:inherit;font-size:14px;outline:0;transition:border .15s,box-shadow .15s}
 .srch input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 .srch input::placeholder{color:var(--text3)}
-.srch-i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3)}
+.srch-i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3)}
 .sdd{position:absolute;top:calc(100%+4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);max-height:320px;overflow-y:auto;z-index:200;box-shadow:0 12px 40px rgba(0,0,0,.5)}
 .sdi{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;transition:background .1s}
-.sdi:hover{background:var(--bg3)}
+.sdi:hover,.sdi.active{background:var(--bg3)}
 .sdi-img{width:48px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0}.sdi-img img{width:100%;height:120%;object-fit:cover;display:block;margin-top:-10%}
 .sdi span{font-size:13px;font-weight:600}
-.hdr-r{display:flex;gap:4px;margin-left:auto;flex-shrink:0}
+.sdi-tag{font-size:10px;color:var(--text3);margin-left:auto;background:rgba(79,195,247,.1);padding:2px 6px;border-radius:4px}
+
+.hdr-r{display:flex;gap:4px;flex-shrink:0}
 .hb{width:36px;height:36px;border-radius:10px;background:0;border:0;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;position:relative}
 .hb:hover{background:var(--accent-glow);color:var(--accent)}
 .hb .dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--accent);border-radius:50%;border:2px solid var(--bg)}
 
-/* LAYOUT */
 .main{flex:1;display:flex;overflow:hidden}
 
-/* SIDEBAR - icons only, expand on hover */
+/* SIDEBAR desktop */
 .sidebar{width:var(--sb-w);background:rgba(14,26,46,.92);backdrop-filter:blur(8px);border-right:1px solid var(--border);overflow-y:auto;overflow-x:hidden;flex-shrink:0;padding:6px 0;z-index:50;transition:width .2s ease}
 .sidebar:hover{width:var(--sb-exp)}
 .sidebar::-webkit-scrollbar{width:0}
@@ -274,28 +388,22 @@ background-size:120px 120px;background-attachment:fixed}
 .sb-count{margin-left:auto;padding-right:12px;font-size:11px;color:var(--text3);font-weight:500;opacity:0;transition:opacity .15s ease}
 .sidebar:hover .sb-count{opacity:1}
 
-/* CONTENT */
-.content{flex:1;overflow-y:auto;padding:12px;-webkit-overflow-scrolling:touch}
+.content{flex:1;overflow-y:auto;padding:12px;-webkit-overflow-scrolling:touch;padding-bottom:calc(12px + var(--safe-b))}
 
-/* DENSE GRID */
-.game-grid{display:grid;grid-auto-flow:dense;gap:8px;grid-template-columns:repeat(3,130px);grid-auto-rows:130px;width:fit-content;max-width:100%;margin:0 auto;list-style:none}
-.col2{grid-column:span 2;grid-row:span 2}
-.col3{grid-column:span 3;grid-row:span 3}
-
-/* GAME CARD with cropped bottom */
-.gc{position:relative;overflow:hidden;border-radius:var(--r);cursor:pointer}
+/* === GAME GRID === */
+.game-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));grid-auto-rows:130px;width:100%;max-width:1600px;margin:0 auto;list-style:none}
+.gc{position:relative;overflow:hidden;border-radius:var(--r);cursor:pointer;grid-column:span 1;grid-row:span 1}
+.gc.featured{grid-column:span 2;grid-row:span 2}
 .gc-inner{position:relative;width:100%;height:100%;overflow:hidden;border-radius:var(--r);transition:transform .2s ease,box-shadow .2s ease}
 .gc:hover .gc-inner{transform:scale(1.02);box-shadow:0 12px 28px rgba(0,0,0,.3)}
 .gc img{width:100%;height:115%;object-fit:cover;display:block;position:absolute;top:0;left:0}
 .gc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9),rgba(0,0,0,.55) 25%,rgba(0,0,0,.15) 40%,transparent 50%);opacity:0;transition:opacity .2s ease;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:10px;z-index:2;border-radius:var(--r)}
 .gc:hover .gc-ov{opacity:1}
-.gc-title{color:#fff;font-weight:700;font-size:13px;text-align:center;line-height:1.2;text-shadow:0 2px 8px rgba(0,0,0,.5)}
-.col3 .gc-title{font-size:18px}
-.col2 .gc-title{font-size:15px}
-/* Hover zoom animation as "video preview" effect */
+.gc-title{color:#fff;font-weight:700;font-size:12px;text-align:center;line-height:1.2;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.gc.featured .gc-title{font-size:17px}
+.gc-badge{position:absolute;top:6px;left:6px;background:linear-gradient(135deg,#ff6b35,#ff3d00);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;z-index:3;letter-spacing:.5px;text-transform:uppercase}
 .gc:hover img{animation:hoverZoom 3s ease-in-out infinite alternate}
-@keyframes hoverZoom{0%{transform:scale(1) translate(0,0)}25%{transform:scale(1.08) translate(-2%,-1%)}50%{transform:scale(1.12) translate(1%,-2%)}75%{transform:scale(1.06) translate(-1%,1%)}100%{transform:scale(1.1) translate(2%,-1%)}}
-@media(hover:none){.gc .gc-ov{opacity:1;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 35%)}}
+@keyframes hoverZoom{0%{transform:scale(1) translate(0,0)}50%{transform:scale(1.1) translate(-1%,-1%)}100%{transform:scale(1.08) translate(1%,-1%)}}
 
 /* GAME PAGE */
 .gp{animation:fu .2s ease}@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -306,7 +414,7 @@ background-size:120px 120px;background-attachment:fixed}
 .gf iframe{width:100%;height:100%;border:0}
 .gf.fs{position:fixed;inset:0;z-index:9999;border-radius:0;aspect-ratio:unset}
 .ga{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.ab{display:flex;align-items:center;gap:5px;padding:8px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;color:var(--text);cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;transition:all .12s}
+.ab{display:flex;align-items:center;gap:5px;padding:8px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;color:var(--text);cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;transition:all .12s}
 .ab:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
 .ab.on{color:var(--accent);border-color:var(--accent);background:var(--accent-glow)}
 .ab.dis{color:#ef5350;border-color:#ef5350;background:rgba(239,83,80,.1)}
@@ -322,7 +430,7 @@ background-size:120px 120px;background-attachment:fixed}
 .more{margin-top:12px}
 .more h3{font-size:15px;font-weight:700;margin-bottom:10px}
 .more-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
-.more-gc{border-radius:var(--r);overflow:hidden;cursor:pointer;aspect-ratio:1;position:relative}
+.more-gc{border-radius:var(--r);overflow:hidden;cursor:pointer;aspect-ratio:1;position:relative;transition:transform .15s}
 .more-gc img{width:100%;height:115%;object-fit:cover;position:absolute;top:0;left:0}
 .more-gc:hover{transform:scale(1.03);box-shadow:0 6px 20px rgba(0,0,0,.3)}
 
@@ -333,48 +441,103 @@ background-size:120px 120px;background-attachment:fixed}
 .fp-h h3{font-size:15px;font-weight:700}
 .xb{background:0;border:0;color:var(--text2);cursor:pointer;padding:4px;border-radius:6px}
 .xb:hover{background:var(--bg3);color:var(--text)}
-.fi{display:flex;gap:8px;padding:6px;border-radius:8px;cursor:pointer;margin-bottom:3px;transition:background .1s}
+.fi{display:flex;gap:8px;padding:6px;border-radius:8px;cursor:pointer;margin-bottom:3px;transition:background .1s;align-items:center}
 .fi:hover{background:var(--accent-glow)}
 .fi-img{width:48px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0}.fi-img img{width:100%;height:120%;object-fit:cover;display:block;margin-top:-10%}
 .fi span{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* RESPONSIVE */
-@media(min-width:560px){.game-grid{grid-template-columns:repeat(4,130px)}}
-@media(min-width:700px){.game-grid{grid-template-columns:repeat(5,130px)}}
-@media(min-width:840px){.game-grid{grid-template-columns:repeat(6,130px)}}
-@media(min-width:980px){.game-grid{grid-template-columns:repeat(7,130px)}}
-@media(min-width:1120px){.game-grid{grid-template-columns:repeat(8,130px)}}
-@media(min-width:1260px){.game-grid{grid-template-columns:repeat(9,130px)}}
-@media(min-width:1400px){.game-grid{grid-template-columns:repeat(10,130px)}}
-@media(min-width:1540px){.game-grid{grid-template-columns:repeat(11,130px)}}
-@media(min-width:1680px){.game-grid{grid-template-columns:repeat(12,130px)}}
-@media(max-width:768px){.sidebar{display:none}.sb-mob{display:flex!important}}
-@media(max-width:500px){
-  .game-grid{grid-template-columns:repeat(3,1fr);grid-auto-rows:auto}
+/* === MOBILE / TABLET WEBAPP === */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .sb-mob{display:flex!important}
+  .hdr{height:48px;padding:0 8px;gap:6px}
+  .logo img{height:30px}
+  .srch input{height:34px;font-size:13px;padding:0 12px 0 34px}
+  .srch-i{left:10px}
+  .hdr-r .hb{width:32px;height:32px}
+  .content{padding:8px;padding-bottom:calc(56px + var(--safe-b))}
+  .game-grid{grid-template-columns:repeat(3,1fr);grid-auto-rows:auto;gap:6px}
   .game-grid .gc{aspect-ratio:1}
-  .col2,.col3{grid-column:span 2;grid-row:span 2}
-  .srch{max-width:none}
+  .gc.featured{grid-column:span 2;grid-row:span 2}
+  .gc-title{font-size:10px}
+  .gc.featured .gc-title{font-size:14px}
+  .gc .gc-ov{opacity:1;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 40%)}
+  .gf{border-radius:8px}
+  .ga{gap:4px}
+  .ab{padding:6px 10px;font-size:11px}
+  .gi{padding:12px}
+  .gi h2{font-size:16px}
+  .more-grid{grid-template-columns:repeat(3,1fr);gap:6px}
 }
-.sb-mob{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,46,.98);backdrop-filter:blur(12px);border-top:1px solid var(--border);z-index:100;padding:6px 8px;gap:2px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
+
+/* Tablet */
+@media(min-width:769px) and (max-width:1024px){
+  .sidebar{display:none}
+  .sb-mob{display:flex!important}
+  .game-grid{grid-template-columns:repeat(4,1fr);grid-auto-rows:auto;gap:8px}
+  .game-grid .gc{aspect-ratio:1}
+  .gc.featured{grid-column:span 2;grid-row:span 2}
+  .content{padding-bottom:calc(56px + var(--safe-b))}
+}
+
+/* Small phone */
+@media(max-width:380px){
+  .game-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* Large desktop */
+@media(min-width:1025px){
+  .game-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));grid-auto-rows:140px}
+}
+
+/* Mobile bottom bar */
+.sb-mob{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,46,.98);backdrop-filter:blur(12px);border-top:1px solid var(--border);z-index:100;padding:6px 8px calc(6px + var(--safe-b));gap:4px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
 .sb-mob::-webkit-scrollbar{display:none}
 .sb-mob-item{padding:6px 12px;border-radius:16px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:inherit;font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:all .12s}
 .sb-mob-item.active{background:var(--accent);border-color:var(--accent);color:#0a1628}
+
+/* Search results header */
+.sr-header{max-width:900px;margin:0 auto 12px}
+.sr-header h2{font-size:16px;font-weight:700;margin-bottom:2px}
+.sr-header p{color:var(--text3);font-size:12px}
 `;
 
 function KhelABC(){
-  const[pg,sP]=useState("home");const[gm,sG]=useState(null);const[q,sQ]=useState("");const[qf,sQf]=useState(false);
-  const[fav,sF]=useState([]);const[sf,sSf]=useState(false);const[fs,sFs]=useState(false);
-  const[activeCat,setCat]=useState("All");
+  const initRoute=getRoute();
+  const[pg,sP]=useState(initRoute.page);
+  const[gm,sG]=useState(()=>{if(initRoute.page==="game"&&initRoute.gameSlug){return DB.find(g=>g.slug===initRoute.gameSlug)||null}return null});
+  const[q,sQ]=useState(initRoute.query||"");
+  const[qf,sQf]=useState(false);
+  const[fav,sF]=useState(()=>{try{return JSON.parse(localStorage.getItem("kh_fav")||"[]").map(id=>DB.find(g=>g.id===id)).filter(Boolean)}catch(e){return[]}});
+  const[sf,sSf]=useState(false);const[fs,sFs]=useState(false);
+  const[activeCat,setCat]=useState(initRoute.cat||"All");
   const[likes,sLikes]=useState(()=>{try{return JSON.parse(localStorage.getItem("kh_likes")||"{}")}catch(e){return{}}});
   const[dislikes,sDislikes]=useState(()=>{try{return JSON.parse(localStorage.getItem("kh_dislikes")||"{}")}catch(e){return{}}});
   const[myVote,sMyVote]=useState(()=>{try{return JSON.parse(localStorage.getItem("kh_votes")||"{}")}catch(e){return{}}});
   const[showLogin,sLogin]=useState(false);const[user,sU]=useState(null);
   const sRef=useRef(null);const cRef=useRef(null);
 
-  useEffect(()=>{try{localStorage.setItem("kh_likes",JSON.stringify(likes));localStorage.setItem("kh_dislikes",JSON.stringify(dislikes));localStorage.setItem("kh_votes",JSON.stringify(myVote))}catch(e){}},[likes,dislikes,myVote]);
+  // Persist
+  useEffect(()=>{try{localStorage.setItem("kh_likes",JSON.stringify(likes));localStorage.setItem("kh_dislikes",JSON.stringify(dislikes));localStorage.setItem("kh_votes",JSON.stringify(myVote));localStorage.setItem("kh_fav",JSON.stringify(fav.map(f=>f.id)))}catch(e){}},[likes,dislikes,myVote,fav]);
 
-  const open=useCallback(g=>{playGameOpen();sG(g);sP("game");sSf(false);if(cRef.current)cRef.current.scrollTop=0},[]);
-  const home=useCallback(()=>{sP("home");sG(null);sFs(false)},[]);
+  // Listen to hash changes (back/forward)
+  useEffect(()=>{
+    const onHash=()=>{
+      const r=getRoute();
+      sP(r.page);setCat(r.cat);
+      if(r.page==="game"&&r.gameSlug){const g=DB.find(x=>x.slug===r.gameSlug);if(g)sG(g)}
+      if(r.page==="search")sQ(r.query);
+      if(cRef.current)cRef.current.scrollTop=0;
+    };
+    window.addEventListener("hashchange",onHash);
+    return()=>window.removeEventListener("hashchange",onHash);
+  },[]);
+
+  const open=useCallback(g=>{playGameOpen();sG(g);sP("game");sSf(false);setRoute("game",g.slug);if(cRef.current)cRef.current.scrollTop=0},[]);
+  const home=useCallback(()=>{sP("home");sG(null);sFs(false);setRoute("home","All");setCat("All")},[]);
+  const goCategory=useCallback(cat=>{playClick();setCat(cat);sP("home");setRoute("home",cat==="All"?"All":cat);if(cRef.current)cRef.current.scrollTop=0},[]);
+  const doSearch=useCallback(()=>{if(q.trim()){playClick();sP("search");setRoute("search",q.trim());sQf(false);if(cRef.current)cRef.current.scrollTop=0}},[q]);
+
   const tF=useCallback(g=>{playLike();sF(p=>p.find(f=>f.id===g.id)?p.filter(f=>f.id!==g.id):[...p,g])},[]);
   const isF=useCallback(id=>fav.some(f=>f.id===id),[fav]);
   const doLike=useCallback((id)=>{playLike();sMyVote(p=>{const cur=p[id];if(cur==="like"){sLikes(l=>({...l,[id]:(l[id]||1)-1}));return{...p,[id]:null}}
@@ -387,23 +550,42 @@ function KhelABC(){
   const filtered=useMemo(()=>DB.filter(g=>matchesCat(g,activeCat)),[activeCat]);
   const catCounts=useMemo(()=>{const c={};CATS.forEach(cat=>{c[cat.n]=DB.filter(g=>matchesCat(g,cat.n)).length});return c},[]);
   const sizedCards=useMemo(()=>buildSizedList(filtered),[filtered]);
-  const res=useMemo(()=>{const s=q.toLowerCase().trim();if(!s)return[];return DB.filter(g=>g.t.toLowerCase().includes(s))},[q]);
-  const sim=useMemo(()=>{if(!gm)return[];return DB.filter(g=>g.id!==gm.id).sort(()=>Math.random()-.5).slice(0,18)},[gm]);
+  const searchResults=useMemo(()=>smartSearch(q),[q]);
+  const dropdownResults=useMemo(()=>smartSearch(q).slice(0,8),[q]);
+  const sim=useMemo(()=>{
+    if(!gm)return[];
+    // Show games with overlapping tags first
+    const gmTags=(gm.tags||"").split(",");
+    return DB.filter(g=>g.id!==gm.id).sort((a,b)=>{
+      const aMatch=(a.tags||"").split(",").filter(t=>gmTags.includes(t)).length;
+      const bMatch=(b.tags||"").split(",").filter(t=>gmTags.includes(t)).length;
+      return bMatch-aMatch;
+    }).slice(0,18);
+  },[gm]);
 
   useEffect(()=>{const h=e=>{if(sRef.current&&!sRef.current.contains(e.target))sQf(false)};document.addEventListener("mousedown",h);return()=>document.removeEventListener("mousedown",h)},[]);
 
+  // Update page title
+  useEffect(()=>{
+    if(pg==="game"&&gm)document.title=gm.t+" - KhelABC";
+    else if(pg==="search")document.title="Search: "+q+" - KhelABC";
+    else if(activeCat!=="All")document.title=activeCat+" Games - KhelABC";
+    else document.title="KhelABC - Free Online Games";
+  },[pg,gm,q,activeCat]);
+
   return(<><style>{CSS}</style><div className="app">
     <header className="hdr">
-      <div className="logo" onClick={()=>{playClick();home();setCat("All")}}>
+      <div className="logo" onClick={home}>
         <img src={LOGO} alt="KhelABC"/>
       </div>
       <div className="srch" ref={sRef}>
         <div className="srch-i"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-        <input placeholder="Search games..." value={q} onChange={e=>sQ(e.target.value)} onFocus={()=>sQf(true)} onKeyDown={e=>{if(e.key==="Enter"&&q.trim()){playClick();sP("search");sQf(false)}}}/>
-        {qf&&q.trim()&&res.length>0&&(
-          <div className="sdd">{res.slice(0,8).map(g=><div key={g.id} className="sdi" onClick={()=>{open(g);sQ("");sQf(false)}}>
+        <input placeholder="Search games, categories, genres..." value={q} onChange={e=>sQ(e.target.value)} onFocus={()=>sQf(true)} onKeyDown={e=>{if(e.key==="Enter")doSearch()}}/>
+        {qf&&q.trim()&&dropdownResults.length>0&&(
+          <div className="sdd">{dropdownResults.map(g=><div key={g.id} className="sdi" onClick={()=>{open(g);sQ("");sQf(false)}}>
             <div className="sdi-img"><img src={g.i} alt=""/></div>
             <span>{g.t}</span>
+            <span className="sdi-tag">{(g.tags||"").split(",")[0]}</span>
           </div>)}</div>)}
       </div>
       <div className="hdr-r">
@@ -421,7 +603,7 @@ function KhelABC(){
       <nav className="sidebar">
         {CATS.map(cat=>(
           <div key={cat.n} className={`sb-item ${activeCat===cat.n?"active":""}`}
-            onClick={()=>{playClick();setCat(cat.n);sP("home");if(cRef.current)cRef.current.scrollTop=0}}>
+            onClick={()=>goCategory(cat.n)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={cat.icon}/></svg>
             <span className="sb-name">{cat.n}</span>
             <span className="sb-count">{catCounts[cat.n]||0}</span>
@@ -432,37 +614,41 @@ function KhelABC(){
       <div className="sb-mob">
         {CATS.map(cat=>(
           <button key={cat.n} className={`sb-mob-item ${activeCat===cat.n?"active":""}`}
-            onClick={()=>{playClick();setCat(cat.n);sP("home");if(cRef.current)cRef.current.scrollTop=0}}>
+            onClick={()=>goCategory(cat.n)}>
             {cat.n}
           </button>
         ))}
       </div>
 
       <div className="content" ref={cRef}>
-        {pg==="home"&&(
+        {pg==="home"&&(<>
+          {activeCat!=="All"&&<div className="sr-header"><h2>{activeCat} Games</h2><p>{filtered.length} games</p></div>}
           <ul className="game-grid">
             {sizedCards.map(g=>(
               <li key={g.id} className={`gc ${g.sz}`} onClick={()=>open(g)}>
                 <div className="gc-inner">
+                  {g.sz==="featured"&&<span className="gc-badge">Popular</span>}
                   <img src={g.i} alt={g.t} loading="lazy"/>
                   <div className="gc-ov"><span className="gc-title">{g.t}</span></div>
                 </div>
               </li>
             ))}
           </ul>
-        )}
+        </>)}
 
-        {pg==="search"&&(<div style={{maxWidth:900,margin:"0 auto"}}>
-          <button className="bk" onClick={()=>{playClick();sP("home")}}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
-          <h2 style={{fontSize:16,fontWeight:700,margin:"6px 0"}}>Results for "{q}"</h2>
-          <p style={{color:"var(--text3)",fontSize:12,marginBottom:10}}>{res.length} games found</p>
-          {res.length>0?<ul className="game-grid">{res.map(g=><li key={g.id} className="gc" onClick={()=>open(g)} style={{aspectRatio:"1"}}><div className="gc-inner"><img src={g.i} alt={g.t} loading="lazy"/><div className="gc-ov"><span className="gc-title">{g.t}</span></div></div></li>)}</ul>
-          :<div style={{textAlign:"center",padding:40,color:"var(--text3)",fontSize:13}}>No games found.</div>}
+        {pg==="search"&&(<div>
+          <div className="sr-header">
+            <button className="bk" onClick={home}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+            <h2>Results for "{q}"</h2>
+            <p>{searchResults.length} games found</p>
+          </div>
+          {searchResults.length>0?<ul className="game-grid">{searchResults.map(g=><li key={g.id} className={`gc ${FEATURED_BIG.has(g.id)?"featured":""}`} onClick={()=>open(g)} style={FEATURED_BIG.has(g.id)?{}:{aspectRatio:"1"}}><div className="gc-inner"><img src={g.i} alt={g.t} loading="lazy"/><div className="gc-ov"><span className="gc-title">{g.t}</span></div></div></li>)}</ul>
+          :<div style={{textAlign:"center",padding:40,color:"var(--text3)",fontSize:13}}>No games found. Try different keywords!</div>}
         </div>)}
 
         {pg==="game"&&gm&&(<div className="gp">
           <div className="gp-top">
-            <button className="bk" onClick={()=>{playClick();home()}}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Games</button>
+            <button className="bk" onClick={home}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Games</button>
             <div className={`gf ${fs?"fs":""}`}>
               <iframe src={gm.e} title={gm.t} allow="autoplay; fullscreen; gamepad" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"/>
               {fs&&<button style={{position:"absolute",top:8,right:8,zIndex:10000}} className="ab" onClick={()=>{playClick();sFs(false)}}>
@@ -479,19 +665,23 @@ function KhelABC(){
               <button className={`ab ${isF(gm.id)?"on":""}`} onClick={()=>tF(gm)}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill={isF(gm.id)?"currentColor":"none"} stroke="currentColor" strokeWidth="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg> {isF(gm.id)?"Saved":"Save"}
               </button>
-              <button className="ab" onClick={()=>{playClick();if(navigator.share)navigator.share({title:gm.t})}}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
+              <button className="ab" onClick={()=>{playClick();if(navigator.share)navigator.share({title:gm.t,url:window.location.href})}}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
               <button className="ab" onClick={()=>{playClick();sFs(true)}}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg> Fullscreen</button>
             </div>
             <div className="gi">
               <h2>{gm.t}</h2>
               <p>{gm.d}</p>
+              <div style={{display:"flex",gap:6,marginTop:8,flexWrap:"wrap"}}>
+                {(gm.tags||"").split(",").map(tag=><span key={tag} style={{fontSize:10,color:"var(--accent)",background:"rgba(79,195,247,.1)",padding:"2px 8px",borderRadius:4,cursor:"pointer"}} onClick={()=>{sQ(tag);sP("search");setRoute("search",tag)}}>{tag}</span>)}
+              </div>
               <div className="gi-stats">
                 <div className="gi-stat"><label>Likes</label><b className="g">{likes[gm.id]||0}</b></div>
                 <div className="gi-stat"><label>Dislikes</label><b className="r">{dislikes[gm.id]||0}</b></div>
               </div>
             </div>
             <div className="more">
-              <h3>More Games</h3>
+              <h3>More Like This</h3>
               <div className="more-grid">{sim.map(g=><div key={g.id} className="more-gc" onClick={()=>open(g)}><img src={g.i} alt={g.t} loading="lazy"/></div>)}</div>
             </div>
           </div>
